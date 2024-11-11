@@ -5,7 +5,7 @@ public class State {
      final char[][] initialGrid;
      final int size;
 
-    // Constructor
+
     public State(char[][] initialGrid) {
         this.size = initialGrid.length;
         this.grid = new char[size][size];
@@ -16,7 +16,7 @@ public class State {
         }
     }
 
-    // Private Constructor for creating a new state from an existing grid
+
     private State(char[][] grid, char[][] initialGrid) {
         this.size = grid.length;
         this.grid = new char[size][size];
@@ -27,7 +27,7 @@ public class State {
         }
     }
 
-    // Method to create a copy of the grid
+
     private char[][] createGridCopy() {
         char[][] newGrid = new char[size][size];
         for (int i = 0; i < size; i++) {
@@ -36,13 +36,13 @@ public class State {
         return newGrid;
     }
 
-    // Checks if the current state is the goal state
+
     public boolean isGoalState() {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if ((grid[row][col] == 'B' && initialGrid[row][col] != 'b') ||
                         (grid[row][col] == 'R' && initialGrid[row][col] != 'r')) {
-                    return false; // لم يتم الوصول إلى الهدف بعد
+                    return false;
                 }
             }
         }
@@ -65,16 +65,16 @@ public class State {
                 for (int col = 0; col < size; col++) {
                     if ((grid[row][col] == 'B' && initialGrid[row][col] == 'b') ||
                             (grid[row][col] == 'R' && initialGrid[row][col] == 'r')) {
-                        newGrid[row][col] = '.'; // Remove the piece when it reaches its goal
+                        newGrid[row][col] = '.';
                     }
                 }
             }
         }
 
-        return new State(newGrid, initialGrid); // Return a new state with updated grid
+        return new State(newGrid, initialGrid);
     }
 
-    // Move player in a specified direction and return a new state
+
     public State movePlayer(int dRow, int dCol) {
         char[][] newGrid = createGridCopy();
 
@@ -94,11 +94,11 @@ public class State {
                         } else if (nextCell == 'r' && newGrid[row][col] == 'R') {
                             newGrid[newRow + dRow][newCol + dCol] = '.';
                             newGrid[row][col] = '.';
-                            return new State(newGrid, initialGrid); // Return new state immediately after goal
+                            return new State(newGrid, initialGrid);
                         } else if (nextCell == 'b' && newGrid[row][col] == 'B') {
                             newGrid[newRow + dRow][newCol + dCol] = '.';
                             newGrid[row][col] = '.';
-                            return new State(newGrid, initialGrid); // Return new state immediately after goal
+                            return new State(newGrid, initialGrid);
                         } else {
                             break;
                         }
@@ -116,10 +116,10 @@ public class State {
                 }
             }
         }
-        return new State(newGrid, initialGrid); // Return a new state with the updated grid
+        return new State(newGrid, initialGrid);
     }
 
-    // Generate all possible move states and return as a list of new states
+
     public List<State> getAllPossibleMovesStates() {
         List<State> possibleStates = new ArrayList<>();
         for (int row = 0; row < size; row++) {
@@ -150,7 +150,7 @@ public class State {
             if ((nextCell == 'r' && currentCell == 'R') || (nextCell == 'b' && currentCell == 'B')) {
                 newGrid[row][col] = '.';
                 newGrid[newRow][newCol] = '.';
-                possibleStates.add(new State(newGrid, initialGrid)); // Add new state to possible states
+                possibleStates.add(new State(newGrid, initialGrid));
                 return;
             } else if (nextCell == '.') {
                 continue;
@@ -164,7 +164,7 @@ public class State {
         if (newRow != row || newCol != col) {
             newGrid[newRow][newCol] = currentCell;
             newGrid[row][col] = '.';
-            possibleStates.add(new State(newGrid, initialGrid)); // Add new state to possible states
+            possibleStates.add(new State(newGrid, initialGrid));
         }
     }
 
