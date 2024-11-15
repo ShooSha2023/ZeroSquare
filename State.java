@@ -1,15 +1,17 @@
 import java.util.*;
 
 public class State {
-     final char[][] grid;
-     final char[][] initialGrid;
-     final int size;
+    final char[][] grid;
+    final char[][] initialGrid;
+    final int size;
+    final State parent;
 
 
     public State(char[][] initialGrid) {
         this.size = initialGrid.length;
         this.grid = new char[size][size];
         this.initialGrid = new char[size][size];
+        this.parent = null;
         for (int i = 0; i < size; i++) {
             this.grid[i] = Arrays.copyOf(initialGrid[i], size);
             this.initialGrid[i] = Arrays.copyOf(initialGrid[i], size);
@@ -17,16 +19,16 @@ public class State {
     }
 
 
-    private State(char[][] grid, char[][] initialGrid) {
+    private State(char[][] grid, char[][] initialGrid, State parent) {
         this.size = grid.length;
         this.grid = new char[size][size];
         this.initialGrid = new char[size][size];
+        this.parent = parent;
         for (int i = 0; i < size; i++) {
             this.grid[i] = Arrays.copyOf(grid[i], size);
             this.initialGrid[i] = Arrays.copyOf(initialGrid[i], size);
         }
     }
-
 
     private char[][] createGridCopy() {
         char[][] newGrid = new char[size][size];
@@ -40,39 +42,46 @@ public class State {
     public boolean isGoalState() {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                if ((grid[row][col] == 'B' && initialGrid[row][col] != 'b') ||
-                        (grid[row][col] == 'R' && initialGrid[row][col] != 'r')) {
+                char currentCell = grid[row][col];
+                char initialCell = initialGrid[row][col];
+
+                if (currentCell == 'B' && initialCell != 'b') {
+                    return false;
+                }
+                if (currentCell == 'R' && initialCell != 'r') {
                     return false;
                 }
             }
         }
-        return true;}
-        public State checkGoalState() {
-        boolean allGoalsReached = true;
-        char[][] newGrid = createGridCopy();
-
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                if ((grid[row][col] == 'B' && initialGrid[row][col] != 'b') ||
-                        (grid[row][col] == 'R' && initialGrid[row][col] != 'r')) {
-                    allGoalsReached = false;
-                }
-            }
-        }
-
-        if (allGoalsReached) {
-            for (int row = 0; row < size; row++) {
-                for (int col = 0; col < size; col++) {
-                    if ((grid[row][col] == 'B' && initialGrid[row][col] == 'b') ||
-                            (grid[row][col] == 'R' && initialGrid[row][col] == 'r')) {
-                        newGrid[row][col] = '.';
-                    }
-                }
-            }
-        }
-
-        return new State(newGrid, initialGrid);
+        return true;
     }
+
+//    public State checkGoalState() {
+//        boolean allGoalsReached = true;
+//        char[][] newGrid = createGridCopy();
+//
+//        for (int row = 0; row < size; row++) {
+//            for (int col = 0; col < size; col++) {
+//                if ((grid[row][col] == 'B' && initialGrid[row][col] != 'b') ||
+//                        (grid[row][col] == 'R' && initialGrid[row][col] != 'r')) {
+//                    allGoalsReached = false;
+//                }
+//            }
+//        }
+//
+//        if (allGoalsReached) {
+//            for (int row = 0; row < size; row++) {
+//                for (int col = 0; col < size; col++) {
+//                    if ((grid[row][col] == 'B' && initialGrid[row][col] == 'b') ||
+//                            (grid[row][col] == 'R' && initialGrid[row][col] == 'r')) {
+//                        newGrid[row][col] = '.';
+//                    }
+//                }
+//            }
+//        }
+//
+//        return new State(newGrid, initialGrid,this);
+//    }
 
 
     public State movePlayer(int dRow, int dCol) {
@@ -94,11 +103,11 @@ public class State {
                         } else if (nextCell == 'r' && newGrid[row][col] == 'R') {
                             newGrid[newRow + dRow][newCol + dCol] = '.';
                             newGrid[row][col] = '.';
-                            return new State(newGrid, initialGrid);
+                            return new State(newGrid, initialGrid, this);
                         } else if (nextCell == 'b' && newGrid[row][col] == 'B') {
                             newGrid[newRow + dRow][newCol + dCol] = '.';
                             newGrid[row][col] = '.';
-                            return new State(newGrid, initialGrid);
+                            return new State(newGrid, initialGrid, this);
                         } else {
                             break;
                         }
@@ -116,57 +125,34 @@ public class State {
                 }
             }
         }
-        return new State(newGrid, initialGrid);
+        return new State(newGrid, initialGrid, this);
     }
 
 
     public List<State> getAllPossibleMovesStates() {
-        List<State> possibleStates = new ArrayList<>();
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                if (grid[row][col] == 'B' || grid[row][col] == 'R') {
-                    addPossibleState(possibleStates, row, col, -1, 0); // Up
-                    addPossibleState(possibleStates, row, col, 1, 0);  // Down
-                    addPossibleState(possibleStates, row, col, 0, -1); // Left
-                    addPossibleState(possibleStates, row, col, 0, 1);  // Right
-                }
-            }
+        Set<State> possibleStates = new HashSet<>();
+
+        List<int[]> directions = Arrays.asList(
+                new int[]{-1, 0}, // أعلى
+                new int[]{1, 0},  // أسفل
+                new int[]{0, -1}, // يسار
+                new int[]{0, 1}   // يمين
+        );
+
+        Collections.shuffle(directions);
+
+        for (int[] dir : directions) {
+            int dRow = dir[0];
+            int dCol = dir[1];
+
+            State newState = this.movePlayer(dRow, dCol);
+
+            possibleStates.add(newState);
         }
-        return possibleStates;
+
+        return new ArrayList<>(possibleStates);
     }
 
-    private void addPossibleState(List<State> possibleStates, int row, int col, int dRow, int dCol) {
-        int newRow = row;
-        int newCol = col;
-        char currentCell = grid[row][col];
-        char[][] newGrid = createGridCopy();
-
-        while (newRow + dRow >= 0 && newRow + dRow < size &&
-                newCol + dCol >= 0 && newCol + dCol < size) {
-            newRow += dRow;
-            newCol += dCol;
-            char nextCell = newGrid[newRow][newCol];
-
-            if ((nextCell == 'r' && currentCell == 'R') || (nextCell == 'b' && currentCell == 'B')) {
-                newGrid[row][col] = '.';
-                newGrid[newRow][newCol] = '.';
-                possibleStates.add(new State(newGrid, initialGrid));
-                return;
-            } else if (nextCell == '.') {
-                continue;
-            } else {
-                newRow -= dRow;
-                newCol -= dCol;
-                break;
-            }
-        }
-
-        if (newRow != row || newCol != col) {
-            newGrid[newRow][newCol] = currentCell;
-            newGrid[row][col] = '.';
-            possibleStates.add(new State(newGrid, initialGrid));
-        }
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -196,5 +182,4 @@ public class State {
     public char[][] getGrid() {
         return createGridCopy();
     }
-
 }

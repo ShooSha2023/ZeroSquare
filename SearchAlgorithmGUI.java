@@ -1,15 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.List;
 
-public class ZeroSquaresGUI extends JFrame {
+//لرؤية كيف تعمل الخوارزميات دون التأثير على كلاس اللاعب ورؤية الحركات المتاحة
+
+public class SearchAlgorithmGUI extends JFrame {
     private State game;
     private JButton[][] buttonGrid;
     private final int GRID_SIZE = 11;
 
-    public ZeroSquaresGUI() {
-
+    public SearchAlgorithmGUI() {
         char[][] initialGrid = {
 //                لون واحد
                 // 1 -->8
@@ -41,7 +41,7 @@ public class ZeroSquaresGUI extends JFrame {
 
 
                 //1 --> 9
-                //              {'.', '.', '.', '.', '1', '1', '1', '1', '1'},
+//                {'.', '.', '.', '.', '1', '1', '1', '1', '1'},
 //                {'.', '.', '.', '.', '1', '.', '.', '.', '1'},
 //                {'1', '1', '1', '1', '1', 'r', '1', '.', '1'},
 //                {'1', '.', '.', '.', 'R', '.', '1', '.', '1'},
@@ -65,62 +65,39 @@ public class ZeroSquaresGUI extends JFrame {
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
         };
 
+
         game = new State(initialGrid);
-
-
         setTitle("Zero Squares Game");
-        setSize(600, 600);
+        setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        setLayout(new BorderLayout());
 
-        setLayout(new GridLayout(GRID_SIZE, GRID_SIZE));
+        JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
         buttonGrid = new JButton[GRID_SIZE][GRID_SIZE];
 
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
                 buttonGrid[row][col] = new JButton();
                 buttonGrid[row][col].setFocusable(false);
-                add(buttonGrid[row][col]);
+                gridPanel.add(buttonGrid[row][col]);
             }
         }
 
-
         updateGrid();
 
+        JPanel controlPanel = new JPanel();
+        JButton bfsButton = new JButton("Solve with BFS");
+        JButton dfsButton = new JButton("Solve with DFS");
+        controlPanel.add(bfsButton);
+        controlPanel.add(dfsButton);
 
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
+        add(gridPanel, BorderLayout.CENTER);
+        add(controlPanel, BorderLayout.SOUTH);
 
-                    case KeyEvent.VK_W:
-                        game = game.movePlayer(-1, 0);
-                        break;
-                    case KeyEvent.VK_S:
-                        game=game.movePlayer(1, 0);
-                        break;
-                    case KeyEvent.VK_A:
-                        game= game.movePlayer(0, -1);
-                        break;
-                    case KeyEvent.VK_D:
-                        game=game.movePlayer(0, 1);
-                        break;
-                    default:
-                        return;
-                }
-
-                updateGrid();
-
-
-                printPossibleGrid();
-
-                if (game.isGoalState()) {
-                    JOptionPane.showMessageDialog(null, "Congratulations, you win!");
-
-                }
-            }
-        });
+        bfsButton.addActionListener(e -> solveWithBFS());
+        dfsButton.addActionListener(e -> solveWithDFS());
 
         setFocusable(true);
     }
@@ -131,38 +108,30 @@ public class ZeroSquaresGUI extends JFrame {
                 char cell = game.grid[row][col];
                 JButton button = buttonGrid[row][col];
                 switch (cell) {
-                    case '1' -> button.setBackground(Color.GRAY); // جدار
-                    case 'R' -> button.setBackground(Color.RED);   // قطعة حمراء
-                    case 'B' -> button.setBackground(Color.BLUE);  // قطعة زرقاء
-                    case 'r' -> button.setBackground(Color.PINK);  // هدف القطعة الحمراء
-                    case 'b' -> button.setBackground(Color.CYAN);  // هدف القطعة الزرقاء
-                    default -> button.setBackground(Color.WHITE);  // خلية فارغة
+                    case '1' -> button.setBackground(Color.GRAY);
+                    case 'R' -> button.setBackground(Color.RED);
+                    case 'B' -> button.setBackground(Color.BLUE);
+                    case 'r' -> button.setBackground(Color.PINK);
+                    case 'b' -> button.setBackground(Color.CYAN);
+                    default -> button.setBackground(Color.WHITE);
                 }
             }
         }
     }
 
-
-    private void printPossibleGrid() {
-        List<State> possibleStates = game.getAllPossibleMovesStates();
-        int stateNum = 0;
-        for (State state : possibleStates) {
-            System.out.println("The grid with possible move " + (stateNum + 1));
-            for (char[] row : state.getGrid()) {
-                for (char cell : row) {
-                    System.out.print(cell + " ");
-                }
-                System.out.println();
-            }
-            System.out.println("---------");
-            stateNum++;
-        }
+    private void solveWithBFS() {
+        SearchAlgorithm bfs = new BFSAlgorithm();
+        java.util.List<State> path = bfs.search(game);
     }
 
+    private void solveWithDFS() {
+        SearchAlgorithm dfs = new DFSAlgorithm();
+        List<State> path = dfs.search(game);
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ZeroSquaresGUI gui = new ZeroSquaresGUI();
+            SearchAlgorithmGUI gui = new SearchAlgorithmGUI();
             gui.setVisible(true);
         });
     }
