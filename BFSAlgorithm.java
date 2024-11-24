@@ -15,7 +15,7 @@ public class BFSAlgorithm implements SearchAlgorithm {
             visitedCount++;
 
             if (currentState.isGoalState()) {
-                System.out.println("Number of visited states (BFS):" + visitedCount);
+                System.out.println("Number of visited states (BFS): " + visitedCount);
                 printPath(currentState); // طباعة المسار
                 return constructPath(currentState);
             }
@@ -23,17 +23,18 @@ public class BFSAlgorithm implements SearchAlgorithm {
             for (State nextState : currentState.getAllPossibleMovesStates()) {
                 if (!visited.contains(nextState)) {
                     visited.add(nextState);
+                    nextState.setParent(currentState); // تعيين الوالد
                     queue.add(nextState);
                 }
             }
         }
-        System.out.println("there is no solution BFS");
+        System.out.println("There is no solution for BFS");
         return null;
     }
 
     private List<State> constructPath(State goalState) {
         List<State> path = new ArrayList<>();
-        for (State state = goalState; state != null; state = state.parent) {
+        for (State state = goalState; state != null; state = state.getParent()) {
             path.add(state);
         }
         Collections.reverse(path);
@@ -42,7 +43,7 @@ public class BFSAlgorithm implements SearchAlgorithm {
 
     private void printPath(State goalState) {
         List<State> path = constructPath(goalState);
-        System.out.println("BFS path :");
+        System.out.println("BFS path:");
 
         int moveCount = 0;
         for (State state : path) {
@@ -51,7 +52,8 @@ public class BFSAlgorithm implements SearchAlgorithm {
             moveCount++;
         }
 
-        System.out.println("Number of moves to reach the goal: " + (moveCount - 1));}
+        System.out.println("Number of moves to reach the goal: " + (moveCount - 1));
+    }
 
     private void pause(int milliseconds) {
         try {

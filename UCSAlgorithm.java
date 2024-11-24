@@ -1,42 +1,42 @@
 import java.util.*;
 
-public class DFSAlgorithm implements SearchAlgorithm {
+public class UCSAlgorithm implements SearchAlgorithm {
     @Override
     public List<State> search(State initialState) {
-        Stack<State> stack = new Stack<>();
-        Set<State> visited = new HashSet<>();
-        stack.push(initialState);
-        visited.add(initialState);
+        PriorityQueue<State> queue = new PriorityQueue<>(Comparator.comparingInt(State::getTotalCost));
+        Map<State, Integer> visited = new HashMap<>();
+        initialState.setTotalCost(0);
+        queue.offer(initialState);
 
         int visitedCount = 0;
 
-        while (!stack.isEmpty()) {
-            State currentState = stack.pop();
+        while (!queue.isEmpty()) {
+            State currentState = queue.poll();
             visitedCount++;
 
-            // تحقق ما إذا كانت الحالة الحالية هي الهدف
             if (currentState.isGoalState()) {
-                System.out.println("Number of visited states (DFS): " + visitedCount);
+                System.out.println("Number of visited states (UCS): " + visitedCount);
                 printPath(currentState);
                 return constructPath(currentState);
             }
 
-            // اجلب جميع الحركات الممكنة
-            for (State nextState : currentState.getAllPossibleMovesStates()) {
-                if (!visited.contains(nextState)) {
-                    visited.add(nextState);
-                    nextState.setParent(currentState); // تعيين الوالد
-                    stack.push(nextState);
+            if (!visited.containsKey(currentState) || visited.get(currentState) > currentState.getTotalCost()) {
+                visited.put(currentState, currentState.getTotalCost());
+
+                for (State nextState : currentState.getAllPossibleMovesStates()) {
+                    nextState.setTotalCost(currentState.getTotalCost() + 1);
+                    nextState.setParent(currentState);
+                    queue.offer(nextState);
                 }
             }
         }
-        System.out.println("There's no solution for DFS");
+        System.out.println("There is no solution for UCS");
         return null;
     }
 
     private List<State> constructPath(State goalState) {
         List<State> path = new ArrayList<>();
-        for (State state = goalState; state != null; state = state.getParent()) { // استخدم getParent
+        for (State state = goalState; state != null; state = state.getParent()) {
             path.add(state);
         }
         Collections.reverse(path);
@@ -45,7 +45,7 @@ public class DFSAlgorithm implements SearchAlgorithm {
 
     private void printPath(State goalState) {
         List<State> path = constructPath(goalState);
-        System.out.println("DFS path:");
+        System.out.println("UCS path:");
 
         int moveCount = 0;
         for (State state : path) {

@@ -90,14 +90,17 @@ public class SearchAlgorithmGUI extends JFrame {
         JPanel controlPanel = new JPanel();
         JButton bfsButton = new JButton("Solve with BFS");
         JButton dfsButton = new JButton("Solve with DFS");
+        JButton ucsButton = new JButton("Solve with UCS"); // زر UCS
         controlPanel.add(bfsButton);
         controlPanel.add(dfsButton);
+        controlPanel.add(ucsButton);
 
         add(gridPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
 
         bfsButton.addActionListener(e -> solveWithBFS());
         dfsButton.addActionListener(e -> solveWithDFS());
+        ucsButton.addActionListener(e -> solveWithUCS());
 
         setFocusable(true);
     }
@@ -127,6 +130,11 @@ public class SearchAlgorithmGUI extends JFrame {
     private void solveWithDFS() {
         SearchAlgorithm dfs = new DFSAlgorithm();
         List<State> path = dfs.search(game);
+    }
+    private void solveWithUCS() {
+        SearchAlgorithm ucs = new UCSAlgorithm(); // استخدام خوارزمية UCS
+        List<State> path = ucs.search(game);
+        // [عرض المسار أو تحديث واجهة المستخدم]
     }
 
     public static void main(String[] args) {

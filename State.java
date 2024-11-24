@@ -4,7 +4,8 @@ public class State {
     final char[][] grid;
     final char[][] initialGrid;
     final int size;
-    final State parent;
+    private int totalCost;
+    State parent;
 
 
     public State(char[][] initialGrid) {
@@ -12,6 +13,7 @@ public class State {
         this.grid = new char[size][size];
         this.initialGrid = new char[size][size];
         this.parent = null;
+        this.totalCost = 0;
         for (int i = 0; i < size; i++) {
             this.grid[i] = Arrays.copyOf(initialGrid[i], size);
             this.initialGrid[i] = Arrays.copyOf(initialGrid[i], size);
@@ -23,11 +25,21 @@ public class State {
         this.size = grid.length;
         this.grid = new char[size][size];
         this.initialGrid = new char[size][size];
-        this.parent = parent;
+        this.parent = null;
+        this.totalCost = 0;
         for (int i = 0; i < size; i++) {
             this.grid[i] = Arrays.copyOf(grid[i], size);
             this.initialGrid[i] = Arrays.copyOf(initialGrid[i], size);
         }
+    }
+
+    // دالة getParent
+    public State getParent() {
+        return parent;
+    }
+    // دالة setParent
+    public void setParent(State parent) {
+        this.parent = parent;
     }
 
     private char[][] createGridCopy() {
@@ -182,4 +194,13 @@ public class State {
     public char[][] getGrid() {
         return createGridCopy();
     }
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+
+    public void setTotalCost(int cost) {
+        this.totalCost = cost;
+    }
+
 }
