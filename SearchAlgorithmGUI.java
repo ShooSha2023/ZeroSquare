@@ -90,10 +90,12 @@ public class SearchAlgorithmGUI extends JFrame {
         JPanel controlPanel = new JPanel();
         JButton bfsButton = new JButton("Solve with BFS");
         JButton dfsButton = new JButton("Solve with DFS");
-        JButton ucsButton = new JButton("Solve with UCS"); // زر UCS
+        JButton ucsButton = new JButton("Solve with UCS");
+        JButton recursiveDFSButton = new JButton("Solve with Recursive DFS");
         controlPanel.add(bfsButton);
         controlPanel.add(dfsButton);
         controlPanel.add(ucsButton);
+        controlPanel.add(recursiveDFSButton);
 
         add(gridPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
@@ -101,6 +103,8 @@ public class SearchAlgorithmGUI extends JFrame {
         bfsButton.addActionListener(e -> solveWithBFS());
         dfsButton.addActionListener(e -> solveWithDFS());
         ucsButton.addActionListener(e -> solveWithUCS());
+        recursiveDFSButton.addActionListener(e -> solveWithRecursiveDFS());
+
 
         setFocusable(true);
     }
@@ -131,10 +135,16 @@ public class SearchAlgorithmGUI extends JFrame {
         SearchAlgorithm dfs = new DFSAlgorithm();
         List<State> path = dfs.search(game);
     }
+
+    private void solveWithRecursiveDFS() {
+        SearchAlgorithm recursiveDFS = new DFSRecursiveAlgorithm();
+        List<State> path = recursiveDFS.search(game);
+    }
+
     private void solveWithUCS() {
-        SearchAlgorithm ucs = new UCSAlgorithm(); // استخدام خوارزمية UCS
+        SearchAlgorithm ucs = new UCSAlgorithm();
         List<State> path = ucs.search(game);
-        // [عرض المسار أو تحديث واجهة المستخدم]
+
     }
 
     public static void main(String[] args) {

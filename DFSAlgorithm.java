@@ -14,18 +14,18 @@ public class DFSAlgorithm implements SearchAlgorithm {
             State currentState = stack.pop();
             visitedCount++;
 
-            // تحقق ما إذا كانت الحالة الحالية هي الهدف
+
             if (currentState.isGoalState()) {
                 System.out.println("Number of visited states (DFS): " + visitedCount);
                 printPath(currentState);
                 return constructPath(currentState);
             }
 
-            // اجلب جميع الحركات الممكنة
+
             for (State nextState : currentState.getAllPossibleMovesStates()) {
                 if (!visited.contains(nextState)) {
                     visited.add(nextState);
-                    nextState.setParent(currentState); // تعيين الوالد
+                    nextState.setParent(currentState);
                     stack.push(nextState);
                 }
             }
@@ -36,7 +36,7 @@ public class DFSAlgorithm implements SearchAlgorithm {
 
     private List<State> constructPath(State goalState) {
         List<State> path = new ArrayList<>();
-        for (State state = goalState; state != null; state = state.getParent()) { // استخدم getParent
+        for (State state = goalState; state != null; state = state.getParent()) {
             path.add(state);
         }
         Collections.reverse(path);

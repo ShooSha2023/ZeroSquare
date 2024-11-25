@@ -16,14 +16,14 @@ public class BFSAlgorithm implements SearchAlgorithm {
 
             if (currentState.isGoalState()) {
                 System.out.println("Number of visited states (BFS): " + visitedCount);
-                printPath(currentState); // طباعة المسار
+                printPath(currentState);
                 return constructPath(currentState);
             }
 
             for (State nextState : currentState.getAllPossibleMovesStates()) {
                 if (!visited.contains(nextState)) {
                     visited.add(nextState);
-                    nextState.setParent(currentState); // تعيين الوالد
+                    nextState.setParent(currentState);
                     queue.add(nextState);
                 }
             }

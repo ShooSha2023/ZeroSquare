@@ -33,15 +33,13 @@ public class State {
         }
     }
 
-    // دالة getParent
+
     public State getParent() {
         return parent;
     }
-    // دالة setParent
     public void setParent(State parent) {
         this.parent = parent;
     }
-
     private char[][] createGridCopy() {
         char[][] newGrid = new char[size][size];
         for (int i = 0; i < size; i++) {
