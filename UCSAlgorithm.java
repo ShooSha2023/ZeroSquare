@@ -34,15 +34,6 @@ public class UCSAlgorithm implements SearchAlgorithm {
         return null;
     }
 
-    private List<State> constructPath(State goalState) {
-        List<State> path = new ArrayList<>();
-        for (State state = goalState; state != null; state = state.getParent()) {
-            path.add(state);
-        }
-        Collections.reverse(path);
-        return path;
-    }
-
     private void printPath(State goalState) {
         List<State> path = constructPath(goalState);
         System.out.println("UCS path:");
@@ -55,6 +46,14 @@ public class UCSAlgorithm implements SearchAlgorithm {
         }
 
         System.out.println("Number of moves to reach the goal: " + (moveCount - 1));
+    }
+    private List<State> constructPath(State goalState) {
+        List<State> path = new ArrayList<>();
+        for (State state = goalState; state != null; state = state.getParent()) {
+            path.add(state);
+        }
+        Collections.reverse(path);
+        return path;
     }
 
     private void pause(int milliseconds) {
