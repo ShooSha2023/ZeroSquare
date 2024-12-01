@@ -6,6 +6,7 @@ public class State {
     final int size;
     private int totalCost;
     State parent;
+    private int heuristicValue;
 
 
     public State(char[][] initialGrid) {
@@ -14,6 +15,7 @@ public class State {
         this.initialGrid = new char[size][size];
         this.parent = null;
         this.totalCost = 0;
+        this.heuristicValue = 0;
         for (int i = 0; i < size; i++) {
             this.grid[i] = Arrays.copyOf(initialGrid[i], size);
             this.initialGrid[i] = Arrays.copyOf(initialGrid[i], size);
@@ -40,6 +42,20 @@ public class State {
     public void setParent(State parent) {
         this.parent = parent;
     }
+    // دالة للحصول على القيمة التقديرية
+    public int getHeuristicValue() {
+        return heuristicValue;
+    }
+
+    // دالة لتعيين القيمة التقديرية
+    public void setHeuristicValue(int heuristicValue) {
+        this.heuristicValue = heuristicValue;
+    }
+
+    // دالة للحصول على التكلفة الإجمالية (التي تشمل التكلفة الفعلية + التقدير
+
+
+
     private char[][] createGridCopy() {
         char[][] newGrid = new char[size][size];
         for (int i = 0; i < size; i++) {
@@ -165,17 +181,18 @@ public class State {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof State)) return false;
-        State other = (State) obj;
-        return Arrays.deepEquals(this.grid, other.grid);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        State state = (State) o;
+        return Arrays.deepEquals(grid, state.grid);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(this.grid);
+        return Arrays.deepHashCode(grid);
     }
+
 
     @Override
     public String toString() {
@@ -192,13 +209,13 @@ public class State {
     public char[][] getGrid() {
         return createGridCopy();
     }
-    public int getTotalCost() {
-        return totalCost;
-    }
 
 
     public void setTotalCost(int cost) {
         this.totalCost = cost;
+    }
+    public int getTotalCost() {
+        return totalCost + heuristicValue;
     }
 
 }
