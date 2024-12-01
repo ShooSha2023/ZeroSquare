@@ -42,17 +42,17 @@ public class State {
     public void setParent(State parent) {
         this.parent = parent;
     }
-    // دالة للحصول على القيمة التقديرية
+
     public int getHeuristicValue() {
         return heuristicValue;
     }
 
-    // دالة لتعيين القيمة التقديرية
+
     public void setHeuristicValue(int heuristicValue) {
         this.heuristicValue = heuristicValue;
     }
 
-    // دالة للحصول على التكلفة الإجمالية (التي تشمل التكلفة الفعلية + التقدير
+
 
 
 
