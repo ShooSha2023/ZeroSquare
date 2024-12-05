@@ -6,7 +6,7 @@ import java.util.List;
 public class ZeroSquaresGUI extends JFrame {
     private State game;
     private JButton[][] buttonGrid;
-    private final int GRID_SIZE = 11;
+    private final int GRID_SIZE = 16;
 
     public ZeroSquaresGUI() {
 
@@ -52,27 +52,60 @@ public class ZeroSquaresGUI extends JFrame {
 //                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
 
                 //2 --> 11
-                {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
-                {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
-                {'.', '1', '1', '1', '1', '1', '.', '.', '.', '.', '.'},
-                {'1', '1', 'R', '.', '.', '1', '1', '1', '1', '1', '.'},
-                {'1', '1', '.', '.', '.', '1', '1', 'b', '.', '1', '.'},
-                {'1', '.', '.', '.', '.', '.', '.', '.', '.', '1', '1'},
-                {'1', '.', '.', '.', '1', '1', '1', '.', '.', 'r', '1'},
-                {'1', '.', '.', '.', '.', '.', '.', '.', '.', '1', '1'},
-                {'1', '1', 'B', '.', '1', '1', '1', '1', '1', '1', '.'},
-                {'.', '1', '1', '1', '1', '.', '.', '.', '.', '.', '.'},
-                {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+//                {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+//                {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+//                {'.', '1', '1', '1', '1', '1', '.', '.', '.', '.', '.'},
+//                {'1', '1', 'R', '.', '.', '1', '1', '1', '1', '1', '.'},
+//                {'1', '1', '.', '.', '.', '1', '1', 'b', '.', '1', '.'},
+//                {'1', '.', '.', '.', '.', '.', '.', '.', '.', '1', '1'},
+//                {'1', '.', '.', '.', '1', '1', '1', '.', '.', 'r', '1'},
+//                {'1', '.', '.', '.', '.', '.', '.', '.', '.', '1', '1'},
+//                {'1', '1', 'B', '.', '1', '1', '1', '1', '1', '1', '.'},
+//                {'.', '1', '1', '1', '1', '.', '.', '.', '.', '.', '.'},
+//                {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+
+//                {'1', '1', '1', '1','1','1','1','1'},
+//                {'1', '1', '1', '1','1','1','1','1'},
+//                {'1', '1', '1', '1','1','1','1','1'},
+//                {'1', '1', 'y', '1','1','1','1','1'},
+//                {'1', 'Y', 'R', 'B','.','.','.','1'},
+//                {'1', 'b', '1', 'r','1','1','1','1'},
+//                {'1', '1', '1', '1','1','1','1','1'},
+//                {'1', '1', '1', '1','1','1','1','1'},
+
+
+
+
+
+
+
+
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','.','.','p','1','1','1','y','1','1','g','1'},
+                {'1', 'R', 'B', 'G','.','.','1','.','.','.','.','.','.','.','.','1'},
+                {'1', 'Y', 'P', '.','.','.','.','.','.','.','.','.','1','.','.','1'},
+                {'1', '1', '1', '1','1','r','1','1','b','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+                {'1', '1', '1', '1','1','1','1','1','1','1','1','1','1','1','1','1'},
+
+
         };
 
         game = new State(initialGrid);
-
 
         setTitle("Zero Squares Game");
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
 
         setLayout(new GridLayout(GRID_SIZE, GRID_SIZE));
         buttonGrid = new JButton[GRID_SIZE][GRID_SIZE];
@@ -85,39 +118,33 @@ public class ZeroSquaresGUI extends JFrame {
             }
         }
 
-
         updateGrid();
-
 
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-
                     case KeyEvent.VK_W:
                         game = game.movePlayer(-1, 0);
                         break;
                     case KeyEvent.VK_S:
-                        game=game.movePlayer(1, 0);
+                        game = game.movePlayer(1, 0);
                         break;
                     case KeyEvent.VK_A:
-                        game= game.movePlayer(0, -1);
+                        game = game.movePlayer(0, -1);
                         break;
                     case KeyEvent.VK_D:
-                        game=game.movePlayer(0, 1);
+                        game = game.movePlayer(0, 1);
                         break;
                     default:
                         return;
                 }
 
                 updateGrid();
-
-
                 printPossibleGrid();
 
                 if (game.isGoalState()) {
                     JOptionPane.showMessageDialog(null, "Congratulations, you win!");
-
                 }
             }
         });
@@ -131,17 +158,22 @@ public class ZeroSquaresGUI extends JFrame {
                 char cell = game.grid[row][col];
                 JButton button = buttonGrid[row][col];
                 switch (cell) {
-                    case '1' -> button.setBackground(Color.GRAY); // جدار
-                    case 'R' -> button.setBackground(Color.RED);   // قطعة حمراء
-                    case 'B' -> button.setBackground(Color.BLUE);  // قطعة زرقاء
-                    case 'r' -> button.setBackground(Color.PINK);  // هدف القطعة الحمراء
-                    case 'b' -> button.setBackground(Color.CYAN);  // هدف القطعة الزرقاء
-                    default -> button.setBackground(Color.WHITE);  // خلية فارغة
+                    case '1' -> button.setBackground(Color.GRAY);
+                    case 'R' -> button.setBackground(Color.RED);
+                    case 'B' -> button.setBackground(Color.BLUE);
+                    case 'Y' -> button.setBackground(Color.YELLOW);
+                    case 'G' -> button.setBackground(Color.GREEN);
+                    case 'P' -> button.setBackground(Color.PINK);
+                    case 'g' -> button.setBackground(new Color(200, 255, 200));
+                    case 'p' -> button.setBackground(new Color(255, 200, 230));
+                    case 'r' -> button.setBackground(new Color(255, 150, 150));
+                    case 'b' -> button.setBackground(new Color(150, 200, 255));
+                    case 'y' -> button.setBackground(new Color(255, 255, 150));
+                    default -> button.setBackground(Color.WHITE);
                 }
             }
         }
     }
-
 
     private void printPossibleGrid() {
         List<State> possibleStates = game.getAllPossibleMovesStates();
@@ -158,7 +190,6 @@ public class ZeroSquaresGUI extends JFrame {
             stateNum++;
         }
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

@@ -3,19 +3,27 @@ import java.util.*;
 public class DFSAlgorithm implements SearchAlgorithm {
     @Override
     public List<State> search(State initialState) {
+        AlgorithmLogger logger = new AlgorithmLogger();
         Stack<State> stack = new Stack<>();
         Set<State> visited = new HashSet<>();
         stack.push(initialState);
         visited.add(initialState);
 
         int visitedCount = 0;
+        long startTime = System.nanoTime();
 
         while (!stack.isEmpty()) {
             State currentState = stack.pop();
             visitedCount++;
-
+            logger.setVisitedNodes(visitedCount-1);
 
             if (currentState.isGoalState()) {
+                long endTime = System.nanoTime();
+                logger.setExecutionTime(startTime, endTime);
+                logger.setSolutionPathNodes(constructPath(currentState).size());
+                logger.calculateMemoryUsage();
+                logger.saveLogToFile("dfs_log.log");
+
                 System.out.println("Number of visited states (DFS): " + visitedCount);
                 printPath(currentState);
                 return constructPath(currentState);
@@ -30,6 +38,13 @@ public class DFSAlgorithm implements SearchAlgorithm {
                 }
             }
         }
+
+
+        long endTime = System.nanoTime();
+        logger.setExecutionTime(startTime, endTime);
+        logger.calculateMemoryUsage();
+        logger.saveLogToFile("dfs_log_no_solution.log");
+
         System.out.println("There's no solution for DFS");
         return null;
     }

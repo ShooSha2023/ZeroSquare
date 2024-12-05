@@ -6,15 +6,32 @@ public class DFSRecursiveAlgorithm implements SearchAlgorithm {
 
     @Override
     public List<State> search(State initialState) {
+        AlgorithmLogger logger = new AlgorithmLogger();
         visited = new HashSet<>();
         visitedCount = 0;
 
         List<State> path = new ArrayList<>();
+        long startTime = System.nanoTime();
+
+
         if (dfs(initialState, path)) {
+            long endTime = System.nanoTime();
+            logger.setExecutionTime(startTime, endTime);
+            logger.setVisitedNodes(visitedCount);
+            logger.setSolutionPathNodes(path.size());
+            logger.calculateMemoryUsage();
+            logger.saveLogToFile("dfs_recursive_log.log");
+
             System.out.println("Number of visited states (Recursive DFS): " + visitedCount);
             printPath(path);
             return path;
         }
+
+        long endTime = System.nanoTime();
+        logger.setExecutionTime(startTime, endTime);
+        logger.setVisitedNodes(visitedCount);
+        logger.calculateMemoryUsage();
+        logger.saveLogToFile("dfs_recursive_log_no_solution.log");
 
         System.out.println("There's no solution for Recursive DFS");
         return null;
